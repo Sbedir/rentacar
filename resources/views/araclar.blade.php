@@ -64,7 +64,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                        @foreach ($aracVerileri as $arac)
                                             <tr >
                                                 <td>
                                                     <div class="table-actions">
@@ -80,20 +80,22 @@
                                                     <a href="#" class="profile-image rounded-circle d-block m-0 wh-32" style="background-image:url {{ asset('img/tm6.png') }}; background-size: cover;"></a>
                                                             
                                                 </td>
-                                                <td>Dacia</td>
-                                                <td>Sandero</td>
-                                                <td>2016</td>
-                                                <td>Müsait</td>
-                                                <td>Uygun</td>
-                                                <td>5</td>
-                                                <td>200kg</td>
-                                                <td>Dizel</td>
-                                                <td>Manuel</td>
-                                                <td>Ekonomik</td>
-                                                <td>Otamatik</td>
-                                                <td>İzmir-Merkez Ofis</td>
+                                                <td>{{ $arac->marka_name }}</td>
+                                                <td>{{ $arac->model_name }}</td>
+                                                <td>{{ $arac->uretim_yili }}</td>
+                                                <td>{{ $arac->arac_musait }}</td>
+                                                <td>Bu veri sonra eklenecek</td>
+                                                <td>{{ $arac->yolcu_kapasite }}</td>
+                                                <td>{{ $arac->bagaj_kapasitesi }} kg</td>
+                                                <td>{{ $arac->yakit_tur_adi }}</td>
+                                                <td>{{ $arac->vites_tur_name }}</td>
+                                                <td>{{ $arac->kategori_name }}</td>
+                                                <td>{{ $arac->klima_tur_name }}</td>
+                                                <td>{{ $arac->ofis_adi }}</td>
                                             
                                             </tr>
+                                        @endforeach
+                                           
 
                                         </tbody>
                                     </table>

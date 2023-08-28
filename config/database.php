@@ -52,7 +52,7 @@ return [
             'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
+            'charset' => 'utf8',
             'collation' => 'utf8_turkish_ci',
             'prefix' => '',
             'prefix_indexes' => true,

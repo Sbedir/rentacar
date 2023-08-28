@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,13 +12,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('araclar');
-});
+Route::get('/araclar', 'App\Http\Controllers\AracController@index');
 
-Route::get('/araclar', function () {
-    return view('araclar');
-});
+// Route::get('/araclar', function () {
+//     return view('araclar');
+// });
 
 Route::get('/haberler', function () {
     return view('haberler');
