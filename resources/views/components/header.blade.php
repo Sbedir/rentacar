@@ -1,10 +1,12 @@
+@inject('translateService', 'App\Services\TranslateService')
 <!DOCTYPE html>
 <!-- saved from url=(0068)https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html -->
 <html lang="en" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>StrikingDash</title>
+    <meta name="csrf-token" content="your-csrf-token">
+    <title>Rent a car</title>
 
     <link href="{{ asset('form_files/css2') }}" rel="stylesheet">
 
@@ -64,12 +66,16 @@
     </g>
   </g>
 </svg></a>
-                <a class="navbar-brand" href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#"><img class="dark" src="{{ asset('form_files/logo_dark.png') }}" alt="svg"><img class="light" src="./form_files/logo_white.png" alt="img"></a>
+                <a class="navbar-brand" href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">
+                    <!-- <img class="dark" src="{{ asset('form_files/logo_dark.png') }}" alt="svg">
+                    <img class="light" src="./form_files/logo_white.png" alt="img"> -->
+                    <h3>RENT A CAR</h3>
+                </a>
                 <form action="https://demo.jsnorm.com/" class="search-form">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <input class="form-control mr-sm-2 box-shadow-none" type="text" placeholder="Search...">
                 </form>
-                <div class="top-menu">
+                <!-- <div class="top-menu">
 
                     <div class="strikingDash-top-menu position-relative">
                         <ul>
@@ -711,7 +717,7 @@
                         </ul>
                     </div>
 
-                </div>
+                </div> -->
             </div>
             <!-- ends: navbar-left -->
 
@@ -825,14 +831,14 @@
                             </div>
                         </div>
                     </li> -->
-                    <!-- <li class="nav-notification">
+                   <!-- <li class="nav-notification">
                         <div class="dropdown-custom">
                             <a href="javascript:;" class="nav-item-toggle">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></a>
                             <div class="dropdown-wrapper">
                                 <h2 class="dropdown-wrapper__title">Notifications <span class="badge-circle badge-warning ml-1">4</span></h2>
-                                <ul>
-                                    <li class="nav-notification__single nav-notification__single--unread d-flex flex-wrap">
+                                <ul> -->
+                              <!--        <li class="nav-notification__single nav-notification__single--unread d-flex flex-wrap">
                                         <div class="nav-notification__type nav-notification__type--primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
                                         </div>
@@ -1017,35 +1023,35 @@
                     </li> -->
                     <li class="nav-flag-select">
                         <div class="dropdown-custom">
-                            <a href="javascript:;" class="nav-item-toggle"><img src="./form_files/flag.png" alt="" class="rounded-circle"></a>
+                            <a href="javascript:;" class="nav-item-toggle"><img src="{{ asset('form_files/flag.png') }}" alt="" class="rounded-circle"></a>
                             <div class="dropdown-wrapper dropdown-wrapper--small">
-                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="./form_files/eng.png" alt=""> English</a>
-                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="./form_files/ger.png" alt=""> German</a>
-                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="./form_files/spa.png" alt=""> Spanish</a>
-                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="./form_files/tur.png" alt=""> Turkish</a>
+                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/eng.png') }}" alt=""> English</a>
+                                <!-- <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/ger.png') }}" alt=""> German</a>
+                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/spa.png') }}" alt=""> Spanish</a> -->
+                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/tur.png') }}" alt=""> Turkish</a>
                             </div>
                         </div>
                     </li>
                     <li class="nav-author">
                         <div class="dropdown-custom">
-                            <a href="javascript:;" class="nav-item-toggle"><img src="./form_files/author-nav.jpg" alt="" class="rounded-circle"></a>
+                            <a href="javascript:;" class="nav-item-toggle"><img src="{{ asset('form_files/author-nav.jpg') }}" alt="" class="rounded-circle"></a>
                             <div class="dropdown-wrapper">
                                 <div class="nav-author__info">
                                     <div class="author-img">
-                                        <img src="./form_files/author-nav.jpg" alt="" class="rounded-circle">
+                                        <img src="{{ asset('form_files/author-nav.jpg') }}" alt="" class="rounded-circle">
                                     </div>
                                     <div>
-                                        <h6>Abdullah Bin Talha</h6>
-                                        <span>UI Designer</span>
+                                        <h6>Sinan Bedir</h6>
+                                        <span>{{$translateService->t("Computer Programmer")}}</span>
                                     </div>
                                 </div>
                                 <div class="nav-author__options">
                                     <ul>
                                         <li>
                                             <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Profile</a>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> {{$translateService->t("Profil")}}</a>
                                         </li>
-                                        <li>
+                                        <!-- <li>
                                             <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</a>
                                         </li>
@@ -1060,10 +1066,10 @@
                                         <li>
                                             <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Help</a>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                     <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html" class="nav-author__signout">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Sign Out</a>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>  {{$translateService->t("Çıkış")}}</a>
                                 </div>
                             </div>
                         </div>

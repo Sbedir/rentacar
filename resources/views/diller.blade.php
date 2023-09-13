@@ -1,7 +1,17 @@
 @extends('layout')
 @section('icerik')
 <div class="contents">
+@if (Session::has('success'))
+    <div class="alert alert-success" >
+        {{ Session::get('success') }}
+    </div>
+@endif
 
+@if (Session::has('error'))
+    <div class="alert alert-danger">
+        {{ Session::get('error') }}
+    </div>
+@endif
 
     <div class="atbd-page-content">
         <div class="container-fluid">
@@ -9,7 +19,7 @@
                 <div class="col-lg-12">
 
                     <div class="breadcrumb-main">
-                        <h4 class="text-capitalize breadcrumb-title">Araçlar</h4>
+                        <h4 class="text-capitalize breadcrumb-title">Diller</h4>
                         <div class="breadcrumb-action justify-content-center flex-wrap">
                         
                             <!-- <div class="dropdown action-btn">
@@ -29,7 +39,7 @@
                         
                             <div class="action-btn">
                                 <a href="#" onClick="ekleModal()" class="btn btn-sm btn-primary btn-add">
-                                    <i class="la la-plus"></i> Araç Ekle</a>
+                                    <i class="la la-plus"></i> Dil Ekle</a>
                             </div>
                         </div>
                     </div>
@@ -47,53 +57,39 @@
                                         <thead>
                                             <tr>
                                                 
-                                                <th>İşlem</th> 
-                                                <th>Resim</th>
-                                                <th>Marka</th>
-                                                <th>Model</th>
-                                                <th>Üretim Yılı</th>
-                                                <th>Araç Müsaitlik Durumu</th>
-                                                <th>Kiralık Durum</th>
-                                                <th>Yolcu Kapasitesi</th>
-                                                <th>Bagaj Kapasitesi</th>
-                                                <th>Yakıt Türü</th>
-                                                <th>Vites Türü</th>
-                                                <th>Araç Kategorisi</th>
-                                                <th>Klima Türü</th>
-                                                <th>Bulunduğu Ofis</th>
+                                                <th>İşlem</th>
+                                                <th>Logo</th> 
+                                                <th>Dil Adı</th>
+                                                <th>Dil Kodu</th>
+                                                
+                                              
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                        @foreach ($DilVerileri as $Dil)
                                             <tr >
                                                 <td>
-                                                    <div class="table-actions">
-                                                        <a href="#">
+                                                <div class="table-actions">
+                                                        <a href="#" onClick='guncelleModal({{ json_encode($Dil) }})'>
                                                             <span data-feather="edit"></span>
                                                         </a>
-                                                        <a href="#">
+                                                        <a href="#" onClick='silModal({{ json_encode($Dil) }})'>
                                                             <span data-feather="trash-2"></span>
                                                         </a>
+                                                    
                                                     </div>
                                                 </td>
+                                                
                                                 <td>
-                                                    <a href="#" class="profile-image rounded-circle d-block m-0 wh-32" style="background-image:url {{ asset('img/tm6.png') }}; background-size: cover;"></a>
-                                                            
+                                                <img style='max-width: 100px;' src="{{ asset($Dil->resim) }}" alt="svg">                                                             
                                                 </td>
-                                                <td>Dacia</td>
-                                                <td>Sandero</td>
-                                                <td>2016</td>
-                                                <td>Müsait</td>
-                                                <td>Uygun</td>
-                                                <td>5</td>
-                                                <td>200kg</td>
-                                                <td>Dizel</td>
-                                                <td>Manuel</td>
-                                                <td>Ekonomik</td>
-                                                <td>Otamatik</td>
-                                                <td>İzmir-Merkez Ofis</td>
+                                                <td>{{$Dil->lang_name}}</td>
+                                                <td>{{$Dil->lang_kod}}</td>
+                                                
+                                               
                                             
                                             </tr>
+                                            @endforeach
 
                                         </tbody>
                                     </table>
@@ -118,247 +114,43 @@
 
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content modal-bg-white ">
-            <div class="modal-header">
+        <div id='modal-header-back' class="modal-header  bg-success">
 
 
-
-                <h6 class="modal-title">Araç Ekleme</h6>
+                <h6 class="modal-title">Dil Ekleme</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span data-feather="x"></span></button>
             </div>
+            <form method="POST" action="{{ route('dil.create.update') }}" enctype="multipart/form-data">
+                @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
+                <input name="language_id" id='language_id'  type="hidden" class="form-control form-control-default">
+           
             <div class="modal-body">
                 <div class="row">
+
+                <div class="col-md-4 mt-2">
+                        <div class="form-group mb-0">
+                            <div class="input-container icon-left position-relative">
+                                <label for="" class="form-group mb-0"><b>Logo Ekle</b></label>
+                                <input name="resim" type="file" class="form-control form-control-default" placeholder="Logo Ekle">
+                            </div>
+                        </div>
+                    </div>
+                  
+
+                <div class="col-md-4 mt-2">
+                        <div class="form-group mb-0">
+                            <div class="input-container icon-left position-relative">
+                                <label for=""  class="form-group mb-0"><b>Dil Adı</b></label>
+                                <input name="lang_name" id="lang_name" type="text" class="form-control form-control-default" placeholder="Dil adı giriniz.">
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-4 mt-2">
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
-                                <label for="" class="form-group mb-0"><b>Resim Ekle</b></label>
-                                <input name="a_resim" type="file" class="form-control form-control-default" placeholder="Resim Ekle">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Marka</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="mr_id" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Dacia</option>
-                                        <option value="2">Renault</option>
-                                        <option value="3">Ford</option>
-                                        <option value="4">Nissan</option>
-                                        <option value="5">Tofaş</option>
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Model</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="m_id" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Sandero</option>
-                                        <option value="2">Clio</option>
-                                        <option value="3">Fiesta</option>
-                                        <option value="4">Qasqai</option>
-                                        <option value="5">Murat 135</option>
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            <label for="" class="form-group mb-0"><b>Üretim Yılı</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    
-                                    <select name="uretim_yili" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="2016">2016</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2009">2009</option>
-                                        <option value="2007">2007</option>
-                                        <option value="1978">1978</option>
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Araç Kategorisi</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="a_kategori" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Ekonomik</option>
-                                        <option value="2">Orta Sınıf</option>
-                                        <option value="3">Üst Sınıf</option>
-                                        <option value="4">Vip</option>
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Klima Türü</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="klima_tur" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Otamatik</option>
-                                        <option value="2">Manuel</option>
-                                        
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Yakıt Türü</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="yakit_tur" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Benzin</option>
-                                        <option value="2">Lpg</option>
-                                        <option value="3">Benzin/Lpg</option>
-                                        <option value="4">Dizel</option>
-                                        <option value="5">Elektrik</option>
-                                        <option value="6">Hybrid</option>
-                                        
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Vites Türü</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="vites_tur" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Manuel</option>
-                                        <option value="2">Yarı Otamatik</option>
-                                        <option value="3">Otamatik</option>
-                                        <option value="4">Triptonik</option>
-
-                                        
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Şehirler</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">İzmir</option>
-                                        <option value="2">Denizli</option>
-                                        <option value="3">Ankara</option>
-                                        <option value="4">İstanbul</option>
-
-                                        
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Ofis</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="ofis_id" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Merkez</option>
-                                        <option value="2">Konak</option>
-                                        <option value="3">Balçova</option>
-                                        <option value="4">Üçyol</option>
-
-                                        
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            
-                            <label for="" class="form-group mb-0"><b>Müsaitlik Durumu</b></label>
-                            <div class="atbd-select-list d-flex">
-                                <div class="atbd-select " style="width: 100%;">
-                                    <select name="a_musait" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">Müsait</option>
-                                        <option value="2">Müsait Değil</option>
-
-                                        
-                                    </select>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            <div class="input-container icon-left position-relative">
-                                <label for=""  class="form-group mb-0"><b>Yolcu Kapasitesi</b></label>
-                                <input name="yolcu_kapasite" min="2" type="number" class="form-control form-control-default" placeholder="Yolcu kapasitesini minimum 2 olacak Şekilde ekleyiniz.">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mt-2">
-                        <div class="form-group mb-0">
-                            <div class="input-container icon-left position-relative">
-                                <label for=""  class="form-group mb-0"><b>Bagaj Kapasitesi</b></label>
-                                <input name="bagaj_kapasitesi" min="0" type="number" class="form-control form-control-default" placeholder="Bagaj kapasitesini kg cinsinden yazınız.">
+                                <label for=""  class="form-group mb-0"><b>Dil Kodu</b></label>
+                                <input name="lang_kod" id="lang_kod" type="text" class="form-control form-control-default" placeholder="Dil kodu giriniz.">
                             </div>
                         </div>
                     </div>
@@ -369,12 +161,86 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm">Kaydet</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Kapat</button>
+                <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
             </div>
+    </form>
         </div>
     </div>
 
 
 </div>
+<div class="modal-basic modal fade show" id="silModal" tabindex="-1" role="dialog" aria-hidden="true">
+
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-bg-white ">
+            <div class="modal-header bg-danger">
+
+
+
+                <h6 class="modal-title">Dil Silme</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span data-feather="x"></span></button>
+            </div>
+            <form method="POST" action="{{ route('dil.delete') }}" enctype="multipart/form-data">
+                @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
+              
+                <input name="sil_id" id='sil_id'  type="hidden" class="form-control form-control-default">
+            <div class="modal-body">
+                <div class="row">
+                   Silmek istediğinize emin misiniz?
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm">Sil</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
+            </div>
+             </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    
+    function ekleModal()
+    {
+        $( "#modal-header-back" ).removeClass( "bg-warning" ).addClass("bg-success");
+        $('#modalTitle').html('Dil Ekleme');
+        $('#lang_name').val("");
+        $('#lang_kod').val("");
+        $('#language_id').val("");
+        $('#ekleGüncelleModal').modal();
+    }
+    function guncelleModal(dil)
+    {
+        console.log(dil)
+        $('#modalTitle').html('Dil Güncelleme');
+        $( "#modal-header-back" ).removeClass( "bg-success" ).addClass( "bg-warning" );
+
+     
+        $('#lang_name').val(dil.lang_name);
+        $('#lang_kod').val(dil.lang_kod);
+        $('#language_id').val(dil.language_id);
+        $('#ekleGüncelleModal').modal();
+    }
+    function silModal(dil)
+    {
+        $('#sil_id').val(dil.language_id);
+        console.log(dil);
+        $('#silModal').modal();
+    }
+
+   
+
+    
+
+   
+
+    
+</script>
 @endsection

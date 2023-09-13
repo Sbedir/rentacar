@@ -1,6 +1,18 @@
+@inject('genelService', 'App\Services\GenelService')
 @extends('layout')
 @section('icerik')
 <div class="contents">
+@if (Session::has('success'))
+    <div class="alert alert-success" >
+        {{ Session::get('success') }}
+    </div>
+@endif
+
+@if (Session::has('error'))
+    <div class="alert alert-danger">
+        {{ Session::get('error') }}
+    </div>
+@endif
 
 
     <div class="atbd-page-content">
@@ -57,47 +69,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                        @foreach ($aracfiyatVerileri as $aracfiyat)
                                             <tr >
                                                 <td>
-                                                    <div class="table-actions">
-                                                        <a href="#">
+                                                <div class="table-actions">
+                                                        <a href="#" onClick='guncelleModal({{ json_encode($aracfiyat) }})'>
                                                             <span data-feather="edit"></span>
                                                         </a>
-                                                        <a href="#">
+                                                        <a href="#" onClick='silModal({{ json_encode($aracfiyat) }})'>
                                                             <span data-feather="trash-2"></span>
                                                         </a>
+                                                    
                                                     </div>
                                                 </td>
                                               
-                                                <td>Dacia/Sandero/2016</td>
-                                                <td>1</td>
-                                                <td>3</td>
-                                                <td>2000</td>
-                                                <td>tl</td>
+                                                <td>{{$aracfiyat->arac_adi}}</td>
+                                                <td>{{$aracfiyat->gun_baslangic}}</td>
+                                                <td>{{$aracfiyat->gun_bitis}}</td>
+                                                <td>{{$aracfiyat->fiyat}}</td>
+                                                <td>{{$aracfiyat->para_birim}}</td>
                                                
                                             
                                             </tr>
-                                            <tr >
-                                                <td>
-                                                    <div class="table-actions">
-                                                        <a href="#">
-                                                            <span data-feather="edit"></span>
-                                                        </a>
-                                                        <a href="#">
-                                                            <span data-feather="trash-2"></span>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                              
-                                                <td>Dacia/Duster/2016</td>
-                                                <td>4</td>
-                                                <td>7</td>
-                                                <td>1500</td>
-                                                <td>tl</td>
-                                               
-                                            
-                                            </tr>
+                                            @endforeach
+                                       
 
                                         </tbody>
                                     </table>
@@ -122,7 +117,7 @@
 
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content modal-bg-white ">
-            <div class="modal-header">
+            <div id='modal-header-back' class="modal-header  bg-success">
 
 
 
@@ -130,6 +125,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span data-feather="x"></span></button>
             </div>
+            <form method="POST" action="{{ route('arac-fiyatlari.create.update') }}" enctype="multipart/form-data">
+                @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
+                <input name="a_fiyat_id" id='a_fiyat_id'  type="hidden" class="form-control form-control-default">
             <div class="modal-body">
                 <div class="row">
                
@@ -139,11 +137,14 @@
                             <label for="" class="form-group mb-0"><b>Araç</b></label>
                             <div class="atbd-select-list d-flex">
                                 <div class="atbd-select " style="width: 100%;">
-                                    <select name="arac_id" id="select-search" class="form-control " style="width: 100%;">
-                                        <option  value="1">Dacia/Sandero/2016</option>
-                                        <option value="2">Dacia/Duster/2016</option>
-                                      
-                                    </select>
+                                <select name="arac_id" id='arac_id'  class="form-control" style="width: 100%;">
+                                        <option value="">Seçiniz</option>  
+                                        @foreach ($genelService->arac() as $arac)
+                                            <option value="{{$arac->a_id}}">{{$arac->aracadi}}</option>
+                                        @endforeach 
+                                            
+                                        
+                                        </select>
 
                                 </div>
 
@@ -155,7 +156,7 @@
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Kira Gün Başlama</b></label>
-                                <input name="gun_baslangic" min="0" type="number" class="form-control form-control-default" placeholder="Başlama gün sayısını ekleyiniz.">
+                                <input name="gun_baslangic" id="gun_baslangic" min="0" type="number" class="form-control form-control-default" placeholder="Başlama gün sayısını ekleyiniz.">
                             </div>
                         </div>
                     </div>
@@ -164,7 +165,7 @@
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Kira Gün Bitiş</b></label>
-                                <input name="gun_bitis" min="0" type="number" class="form-control form-control-default" placeholder="Bitiş gün sayısını ekleyiniz.">
+                                <input name="gun_bitis" id="gun_bitis" min="0" type="number" class="form-control form-control-default" placeholder="Bitiş gün sayısını ekleyiniz.">
                             </div>
                         </div>
                     </div>
@@ -173,7 +174,7 @@
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Kira Fiyatı</b></label>
-                                <input name="fiyat" min="0" type="number" class="form-control form-control-default" placeholder="Kira fiyatını ekleyiniz.">
+                                <input name="fiyat" id="fiyat" min="0" type="number" class="form-control form-control-default" placeholder="Kira fiyatını ekleyiniz.">
                             </div>
                         </div>
                     </div>
@@ -185,10 +186,12 @@
                             <label for="" class="form-group mb-0"><b>Para Birimi</b></label>
                             <div class="atbd-select-list d-flex">
                                 <div class="atbd-select " style="width: 100%;">
-                                    <select name="para_birim_id" id="select-search" class="form-control " style="width: 100%;">
-                                        <option value="1">tl</option>
-                                        <option value="2">dolar</option>
-                                        <option value="3">euro</option>
+                                <select name="para_birim_id" id="para_birim_id" class="form-control " style="width: 100%;">
+                                    <option value="">Seçiniz</option>  
+                                        @foreach ($genelService->paraBirimi() as $parabirim)
+                                            <option value="{{$parabirim->para_birim_id}}">{{$parabirim->para_name}}</option>
+                                        @endforeach 
+                                            
                                       
                                     </select>
 
@@ -204,13 +207,96 @@
 
                 </div>
             </div>
+           
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm">Kaydet</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Kapat</button>
+                <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
             </div>
+            </form>
         </div>
     </div>
 
 
 </div>
+<div class="modal-basic modal fade show" id="silModal" tabindex="-1" role="dialog" aria-hidden="true">
+
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-bg-white ">
+            <div class="modal-header bg-danger">
+
+
+
+                <h6 class="modal-title">Araç Fiyatı Silme</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span data-feather="x"></span></button>
+            </div>
+            <form method="POST" action="{{ route('fiyat.delete') }}" enctype="multipart/form-data">
+                @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
+              
+                <input name="sil_id" id='sil_id'  type="hidden" class="form-control form-control-default">
+            <div class="modal-body">
+                <div class="row">
+                   Silmek istediğinize emin misiniz?
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm">Sil</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
+            </div>
+             </form>
+
+        </div>
+    </div>
+
+
+</div>
+<script>
+    
+    function ekleModal()
+    {
+        
+         $( "#modal-header-back" ).removeClass( "bg-warning" ).addClass("bg-success");
+        $('#modalTitle').html('Araç Fiyat Ekleme'); 
+        $('#a_fiyat_id').val("");
+        $('#para_birim_id').val("");
+        $('#fiyat').val("");
+        $('#arac_id').val("");
+        $('#gun_baslangic').val("");
+        $('#gun_bitis').val("");
+        $('#ekleGüncelleModal').modal();
+    }
+    function guncelleModal(aracfiyat)
+    {
+        console.log(aracfiyat)
+        $( "#modal-header-back" ).removeClass( "bg-success" ).addClass( "bg-warning" );
+        $('#modalTitle').html('Araç Fiyat Güncelleme');
+        $('#a_fiyat_id').val(aracfiyat.a_fiyat_id);
+        $('#arac_id').val(aracfiyat.arac_id);
+        $('#gun_baslangic').val(aracfiyat.gun_baslangic);
+        $('#gun_bitis').val(aracfiyat.gun_bitis);
+        $('#para_birim_id').val(aracfiyat.para_birim_id);
+        $('#fiyat').val(aracfiyat.fiyat);
+    
+ 
+       
+        $('#ekleGüncelleModal').modal();
+    }
+    function silModal(aracfiyat)
+    {
+        $('#sil_id').val(aracfiyat.a_fiyat_id);
+        console.log(aracfiyat);
+        $('#silModal').modal();
+    }
+
+   
+
+
+    
+
+ 
+
+    
+</script>
 @endsection

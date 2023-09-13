@@ -1,6 +1,17 @@
 @extends('layout')
 @section('icerik')
 <div class="contents">
+@if (Session::has('success'))
+    <div class="alert alert-success" >
+        {{ Session::get('success') }}
+    </div>
+@endif
+
+@if (Session::has('error'))
+    <div class="alert alert-danger">
+        {{ Session::get('error') }}
+    </div>
+@endif
 
 
     <div class="atbd-page-content">
@@ -57,29 +68,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                        @foreach ($sliderVerileri as $slider)
                                             <tr >
                                                 <td>
-                                                    <div class="table-actions">
-                                                        <a href="#">
+                                                <div class="table-actions">
+                                                        <a href="#" onClick='guncelleModal({{ json_encode($slider) }})'>
                                                             <span data-feather="edit"></span>
                                                         </a>
-                                                        <a href="#">
+                                                        <a href="#" onClick='silModal({{ json_encode($slider) }})'>
                                                             <span data-feather="trash-2"></span>
                                                         </a>
+                                                    
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <a href="#" class="profile-image rounded-circle d-block m-0 wh-32" style="background-image:url {{ asset('img/tm6.png') }}; background-size: cover;"></a>
+                                                    <a href="#" class="profile-image rounded-circle d-block m-0 wh-32" src="{{ asset($slider->resim) }}" background-size: cover;></a>
                                                             
                                                 </td>
-                                                <td>Slider1</td>
-                                                <td>Slider1 Açıklama</td>
-                                                <td>Slider1 Açıklama2</td>
+                                                <td>{{$slider->sli_baslik}}</td>
+                                                <td>{{$slider->sli_aciklama}}</td>
+                                                <td>{{$slider->sli_aciklama2}}</td>
                                             
                                             
                                             </tr>
-
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -103,14 +115,16 @@
 
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content modal-bg-white ">
-            <div class="modal-header">
-
+        <div id='modal-header-back' class="modal-header  bg-success">
 
 
                 <h6 class="modal-title">Slider Ekleme</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span data-feather="x"></span></button>
             </div>
+            <form method="POST" action="{{ route('slider.create.update') }}" enctype="multipart/form-data">
+                @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
+                <input name="sli_id" id='sli_id'  type="hidden" class="form-control form-control-default">
             <div class="modal-body">
                 <div class="row">
 
@@ -118,7 +132,7 @@
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for="" class="form-group mb-0"><b>Resim Ekle</b></label>
-                                <input name="resim" type="file" class="form-control form-control-default" placeholder="Resim Ekle">
+                                <input name="resim" id="resim" type="file" class="form-control form-control-default" placeholder="Resim Ekle">
                             </div>
                         </div>
                     </div>
@@ -127,7 +141,7 @@
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Başlık</b></label>
-                                <input name="sli_baslik"  type="text" class="form-control form-control-default" placeholder="Slider adını yazınız.">
+                                <input name="sli_baslik" id="sli_baslik"  type="text" class="form-control form-control-default" placeholder="Slider adını yazınız.">
                             </div>
                         </div>
                     </div>
@@ -138,7 +152,7 @@
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Açıklama</b></label>
-                                <textarea name="sli_aciklama" class="form-control form-control-default"> </textarea>
+                                <textarea name="sli_aciklama" id="sli_aciklama" class="form-control form-control-default"> </textarea>
                             </div>
                         </div>
                     </div>
@@ -147,7 +161,7 @@
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Açıklama 2</b></label>
-                                <textarea name="sli_aciklama2" class="form-control form-control-default"> </textarea>
+                                <textarea name="sli_aciklama2" id="sli_aciklama2" class="form-control form-control-default"> </textarea>
                             </div>
                         </div>
                     </div>
@@ -156,12 +170,86 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm">Kaydet</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Kapat</button>
+                <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
             </div>
+            </form>
         </div>
     </div>
 
 
 </div>
+
+<div class="modal-basic modal fade show" id="silModal" tabindex="-1" role="dialog" aria-hidden="true">
+
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-bg-white ">
+            <div class="modal-header bg-danger">
+
+
+
+                <h6 class="modal-title">Slider Silme</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span data-feather="x"></span></button>
+            </div>
+            <form method="POST" action="{{ route('slider.delete') }}" enctype="multipart/form-data">
+                @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
+              
+                <input name="s_id" id='s_id'  type="hidden" class="form-control form-control-default">
+            <div class="modal-body">
+                <div class="row">
+                   Silmek istediğinize emin misiniz?
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm">Sil</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
+            </div>
+             </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    
+    function ekleModal()
+    {
+        $( "#modal-header-back" ).removeClass( "bg-warning" ).addClass("bg-success");
+        $('#modalTitle').html('Slider Ekleme');
+        $('#sli_baslik').val("");
+        $('#sli_aciklama').val("");
+        $('#sli_aciklama2').val("");
+        $('#sli_id').val("");
+        $('#ekleGüncelleModal').modal();
+    }
+    function guncelleModal(slider)
+    {
+        $( "#modal-header-back" ).removeClass( "bg-success" ).addClass( "bg-warning" );
+        console.log(slider)
+        $('#modalTitle').html('Slider Güncelleme');
+        $('#sli_baslik').val(slider.sli_baslik);
+        $('#sli_aciklama').val(slider.sli_aciklama);
+        $('#sli_aciklama2').val(slider.sli_aciklama2);
+        $('#sli_id').val(slider.sli_id);
+        $('#ekleGüncelleModal').modal();
+    }
+    function silModal(slider)
+    {  $('#s_id').val(slider.sli_id);
+        console.log(slider);
+        $('#silModal').modal();
+    }
+
+   
+
+    
+
+   
+
+    
+</script>
 @endsection

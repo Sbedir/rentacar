@@ -3,26 +3,11 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="footer-copyright">
-                            <p>2020 @<a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">Aazztech</a>
+                            <p>2023 @<a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">Esmiranet</a>
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="footer-menu text-right">
-                            <ul>
-                                <li>
-                                    <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">About</a>
-                                </li>
-                                <li>
-                                    <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">Team</a>
-                                </li>
-                                <li>
-                                    <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">Contact</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- ends: .Footer Menu -->
-                    </div>
+           
                 </div>
             </div>
         </footer>
@@ -68,11 +53,11 @@
            'excel', 'pdf'
         ]
     } );
-
-    function ekleModal()
-    {
-        $('#ekleGüncelleModal').modal();
-    }
+    // (".kb__select").select2({placeholder:"Seçiniz",dropdownCssClass:"category-member",allowClear:!0})
+    // function ekleModal()
+    // {
+    //     $('#ekleGüncelleModal').modal();
+    // }
     </script>
 
 </body></html>
