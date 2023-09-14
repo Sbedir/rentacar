@@ -34,9 +34,20 @@ class AracController extends Controller
     {
         try {
                 $a_id = $request->input('a_id');
-                $resimYolu='storage/'.Helper::imageUpload($request->file('a_resim'), 'img');
+              
 
+                $image = $request->file('a_resim');
 
+                // Resim dosyasının adını belirleyin ve depolamak için kullanın
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+            
+                // Resmi storage/app/public klasörüne kaydedin
+                Storage::disk('public')->put($imageName, file_get_contents($image));
+            
+                // Resmin yolunu veritabanına kaydedebilirsiniz
+                $path = 'storage/' . $imageName;
+
+                
                 if(intval($a_id)!==0)
                 {
                     $aracVerileri = DB::select(DB::raw("
@@ -68,7 +79,7 @@ class AracController extends Controller
                             'mr_id'=> $validatedData['mr_id'],
                             'm_id'=> $validatedData['m_id'],
                             'uretim_yili'=> $validatedData['uretim_yili'],
-                            'a_resim'=>  $resimYolu,
+                            'a_resim'=> $path,
                             'a_musait' => $validatedData['a_musait'],
                             'yolcu_kapasite'=>$validatedData['yolcu_kapasite'],
                             'bagaj_kapasitesi'=> $validatedData['bagaj_kapasitesi'],
@@ -90,7 +101,7 @@ class AracController extends Controller
                  $arac ->mr_id = $request->input('mr_id');
                  $arac ->m_id = $request->input('m_id');
                  $arac ->uretim_yili = $request->input('uretim_yili');
-                 $arac ->a_resim = $resimYolu;
+                 $arac ->a_resim =  $path;
                  $arac ->a_musait = $request->input('a_musait');
                  $arac ->yolcu_kapasite = $request->input('yolcu_kapasite');
                  $arac ->bagaj_kapasitesi = $request->input('bagaj_kapasitesi');

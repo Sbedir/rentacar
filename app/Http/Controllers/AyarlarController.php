@@ -22,7 +22,16 @@ class AyarlarController extends Controller
     {
         try {
             $ayar_id = 1;
-            $resimYolu = 'storage/' . Helper::imageUpload($request->file('logo'), 'img');
+            $image = $request->file('logo');
+
+            // Resim dosyasının adını belirleyin ve depolamak için kullanın
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+        
+            // Resmi storage/app/public klasörüne kaydedin
+            Storage::disk('public')->put($imageName, file_get_contents($image));
+        
+            // Resmin yolunu veritabanına kaydedebilirsiniz
+            $path = 'storage/' . $imageName;
     
             // "ayar_id" ile ilgili kaydı veritabanında ara
             $ayarveri = Ayarlar::find($ayar_id);
@@ -47,7 +56,7 @@ class AyarlarController extends Controller
             // Verileri güncelle veya ekle
             $ayarveri->adres = $validatedData['adres'];
             $ayarveri->tel = $validatedData['tel'];
-            $ayarveri->logo = $resimYolu;
+            $ayarveri->logo = $path;
             $ayarveri->e_posta = $validatedData['e_posta'];
             $ayarveri->maps = $validatedData['maps'];
             $ayarveri->face = $validatedData['face'];

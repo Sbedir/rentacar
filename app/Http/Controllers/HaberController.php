@@ -26,7 +26,16 @@ class HaberController extends Controller
     {
         try {
                 $haber_id = $request->input('haber_id');
-                $resimYolu='storage/'.Helper::imageUpload($request->file('haber_resim'), 'img');
+                $image = $request->file('haber_resim');
+
+                // Resim dosyasının adını belirleyin ve depolamak için kullanın
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+            
+                // Resmi storage/app/public klasörüne kaydedin
+                Storage::disk('public')->put($imageName, file_get_contents($image));
+            
+                // Resmin yolunu veritabanına kaydedebilirsiniz
+                $path = 'storage/' . $imageName;
 
 
                 if(intval($haber_id)!==0)
@@ -50,7 +59,7 @@ class HaberController extends Controller
                             'haber_adi'=> $validatedData['haber_adi'],
                             'haber_icerik'=> $validatedData['haber_icerik'],
                             'yayin_tarihi'=> $validatedData['yayin_tarihi'],
-                            'haber_resim'=>  $resimYolu,
+                            'haber_resim'=>  $path,
                             'begen' => $validatedData['begen']
                           
                         ]);
@@ -66,7 +75,7 @@ class HaberController extends Controller
                  $haber ->haber_adi = $request->input('haber_adi');
                  $haber ->haber_icerik = $request->input('haber_icerik');
                  $haber ->yayin_tarihi = $request->input('yayin_tarihi');
-                 $haber ->haber_resim = $resimYolu;
+                 $haber ->haber_resim = $path;
                  $haber ->begen = $request->input('begen');;
                  
                 

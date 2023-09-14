@@ -21,7 +21,16 @@ class DilController extends Controller
     {
         try {
                 $language_id = $request->input('language_id');
-                $resimYolu='storage/'.Helper::imageUpload($request->file('resim'), 'img');
+                $image = $request->file('a_resim');
+
+                // Resim dosyasının adını belirleyin ve depolamak için kullanın
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+            
+                // Resmi storage/app/public klasörüne kaydedin
+                Storage::disk('public')->put($imageName, file_get_contents($image));
+            
+                // Resmin yolunu veritabanına kaydedebilirsiniz
+                $path = 'storage/' . $imageName;
 
 
                 if(intval($language_id)!==0)
@@ -43,7 +52,7 @@ class DilController extends Controller
                         ->update([
                             'lang_name'=> $validatedData['lang_name'],
                             'lang_kod'=> $validatedData['lang_kod'],
-                            'resim'=>  $resimYolu
+                            'resim'=>  $path
 
                           
                         ]);
@@ -58,7 +67,7 @@ class DilController extends Controller
 
                  $Dil ->lang_name = $request->input('lang_name');
                  $Dil ->lang_kod = $request->input('lang_kod');
-                 $Dil ->resim = $resimYolu;
+                 $Dil ->resim = $path;
 
                  
                 

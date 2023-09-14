@@ -23,8 +23,16 @@ class SliderController extends Controller
         try {
                 $sli_id = $request->input('sli_id');
               
-                $resimYolu='storage/'.Helper::imageUpload($request->file('resim'), 'img');
+                $image = $request->file('resim');
 
+                // Resim dosyasının adını belirleyin ve depolamak için kullanın
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+            
+                // Resmi storage/app/public klasörüne kaydedin
+                Storage::disk('public')->put($imageName, file_get_contents($image));
+            
+                // Resmin yolunu veritabanına kaydedebilirsiniz
+                $path = 'storage/' . $imageName;
 
                 if(intval($sli_id)!==0)
                 {
@@ -45,7 +53,7 @@ class SliderController extends Controller
                         ]);
                         $slider = Slider::where('sli_id', $sli_id)
                         ->update([
-                            'resim'=>  $resimYolu,
+                            'resim'=>  $path,
                             'sli_baslik'=> $validatedData['sli_baslik'],
                             'sli_aciklama'=> $validatedData['sli_aciklama'],
                             'sli_aciklama2' => $validatedData['sli_aciklama2']
@@ -61,7 +69,7 @@ class SliderController extends Controller
                     $slider = new Slider;
                  }
 
-                 $slider ->resim = $resimYolu;
+                 $slider ->resim = $path;
                  $slider ->sli_baslik = $request->input('sli_baslik');
                  $slider ->sli_aciklama = $request->input('sli_aciklama');
                  $slider ->sli_aciklama2 = $request->input('sli_aciklama2');

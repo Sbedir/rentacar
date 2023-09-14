@@ -113,14 +113,14 @@
 
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content modal-bg-white ">
-               <div id='modal-header-back' class="modal-header  bg-success">
+                <div id='modal-header-back' class="modal-header  bg-success">
 
 
 
                 <h6 class="modal-title">Ofis Ekleme</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span data-feather="x"></span></button>
-              </div>
+                </div>
             <form method="POST" action="{{ route('arac-ofis.create.update') }}" enctype="multipart/form-data">
                 @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
                 <input name="ofis_id" id='ofis_id'  type="hidden" class="form-control form-control-default">
@@ -128,7 +128,7 @@
                 <div class="row">
                   
 
-                <div class="col-md-4 mt-2">
+                    <div class="col-md-4 mt-2">
                         <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Ofis Adı</b></label>
@@ -136,8 +136,6 @@
                             </div>
                         </div>
                     </div>
-
-
 
                     <div class="col-md-4 mt-2">
                         <div class="form-group mb-0">
@@ -159,7 +157,6 @@
                         </div>
                     </div>
 
-
                     <div class="col-md-4 mt-2">
                         <div class="form-group mb-0">
                             
@@ -175,15 +172,29 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 mt-2">
-                        <div class="form-group mb-0">
+
+
+
+
+                        <div class="col-md-12 mt-2">
+                          <div class="form-group mb-0">
                             <div class="input-container icon-left position-relative">
                                 <label for=""  class="form-group mb-0"><b>Ofis Konumu</b></label>
                                <textarea  name="ofis_maps" id="ofis_maps"  type="text" class="form-control form-control-default" placeholder="Konum giriniz."></textarea>
                              
                             </div>
+                          </div>
                         </div>
-                    </div>
+
+
+                    
+
+                       
+                       
+                       
+              
+
+                       
 
 
                     
@@ -191,17 +202,21 @@
 
 
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
-            </div>
-          </form>
+              </div>
+                   <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
+                   </div>
+            </form>
         </div>
     </div>
 
 
 </div>
+
+
+
+
 <div class="modal-basic modal fade show" id="silModal" tabindex="-1" role="dialog" aria-hidden="true">
 
 
@@ -247,8 +262,8 @@
         $('#ofis_id').val("");
         $('#ofis_name').val("");
         $('#ofis_maps').val("");
-        $('#ilce-select').val("");
         $('#il').val("");
+        $('#ilce-select').val("");
 
 
         $('#ekleGüncelleModal').modal();
