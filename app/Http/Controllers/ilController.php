@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\il;
+use App\Models\ilce;
 use Illuminate\Http\Request;
 
 use Helper;
@@ -73,6 +74,12 @@ class ilController extends Controller
     {
         try {
             $sil_id = $request->input('sil_id');
+            $ilce = ilce::where('il_id', $sil_id)->get()->toArray();
+        if(!empty($ilce))
+        {
+            session()->flash('error', 'Bu il bilgisi daha önceden kullanılmıştır.Bu nedenle silemessiniz.');
+            return redirect()->back();
+        }
             $sil = DB::table('il')->where('il_id', $sil_id)->delete();
     
             if ($sil) {

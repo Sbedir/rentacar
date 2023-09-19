@@ -90,8 +90,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <a href="#" class="profile-image rounded-circle d-block m-0 wh-32" style="background-image:url {{ asset('img/tm6.png') }}; background-size: cover;"></a>
-                                                            
+                                                <img style='max-width: 100px;' src="{{ asset($arac->resim) }}" alt="svg">                                                              
                                                 </td>
                                                 <td>{{ $arac->arac_adi }}</td>
                                                 <td>{{ $arac->alis_yeri }}</td>
@@ -410,7 +409,7 @@
                             
                             <label for="" class="form-group mb-0"><b>Alış Tarihi</b></label>
                             <div class="atbd-select-list d-flex">
-                                        <input name="alis_tarihi" id="alis_tarihi" onchange="hesap()" type="datetime" class="form-control form-control-default" >
+                                        <input name="alis_tarihi" id="alis_tarihi" onchange="hesap()" type="date" class="form-control form-control-default" >
                             </div>
                         </div>
                     </div>
@@ -420,7 +419,7 @@
                             
                             <label for="" class="form-group mb-0"><b>Dönüş Tarihi</b></label>
                             <div class="atbd-select-list d-flex">
-                                        <input name="donus_tarihi" id="donus_tarihi" onchange="hesap()" type="datetime" class="form-control form-control-default" >
+                                        <input name="donus_tarihi" id="donus_tarihi" onchange="hesap()" type="date" class="form-control form-control-default" >
                             </div>
                         </div>
                     </div>
@@ -503,6 +502,7 @@
                             </div>
                         </div>
                     </div>
+                    <p id='hata' style='color:red;margin-top: 15px;'><p>
 
                 </div>
             </div>
@@ -565,6 +565,7 @@
   
     function ekleModal()
     {
+        $('#hata').html("");
         
          $( "#modal-header-back" ).removeClass( "bg-warning" ).addClass("bg-success");
         $('#modalTitle').html('Kiralık Araç Ekleme'); 
@@ -593,7 +594,7 @@
     }
     function guncelleModal(arac)
     {
-        console.log(arac)
+        $('#hata').html("");
         $( "#modal-header-back" ).removeClass( "bg-success" ).addClass( "bg-warning" );
         $('#modalTitle').html('Kiralık Araç Güncelleme');
         $('#id').val(arac.id);
@@ -660,10 +661,19 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                $('#toplam_tutar').val(data.toplamFiyat);
+                if(data.hata!==undefined)
+                {
+                    $('#hata').html(data.hata)
+                }
+                else
+                {
+                    $('#toplam_tutar').val(data.toplamFiyat);
                 $('#toplam_tutar_1').val(data.toplamFiyat);
                 $('#kiralanan_fiyat').val(data.kiralananFiyat);
                 $('#kiralanan_fiyat_1').val(data.kiralananFiyat);
+                $('#hata').html("");
+                }
+                
             })
             .catch(error => {
                 console.error('Error:', error);

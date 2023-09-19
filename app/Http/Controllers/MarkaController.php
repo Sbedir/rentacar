@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Marka;
 use Illuminate\Http\Request;
+use App\Models\Arac;
 
 use Helper;
 use Illuminate\Support\Facades\DB;
@@ -73,6 +74,12 @@ class MarkaController extends Controller
     {
         try {
             $sil_id = $request->input('sil_id');
+            $arac = Arac::where('mr_id', $sil_id)->get()->toArray();
+            if(!empty($arac))
+            {
+                session()->flash('error', 'Bu marka arac sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
             $sil = DB::table('marka')->where('mr_id', $sil_id)->delete();
     
             if ($sil) {

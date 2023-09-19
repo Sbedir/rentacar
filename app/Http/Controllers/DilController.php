@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Dil;
 use Illuminate\Http\Request;
+use App\Models\Translate;
 
 use Helper;
 use Illuminate\Support\Facades\DB;
@@ -20,17 +21,13 @@ class DilController extends Controller
     public function createUpdate(Request $request)
     {
         try {
-                $language_id = $request->input('language_id');
-                $image = $request->file('a_resim');
-
-                // Resim dosyasının adını belirleyin ve depolamak için kullanın
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-            
-                // Resmi storage/app/public klasörüne kaydedin
-                Storage::disk('public')->put($imageName, file_get_contents($image));
-            
-                // Resmin yolunu veritabanına kaydedebilirsiniz
-                $path = 'storage/' . $imageName;
+            $language_id = $request->input('language_id');
+            $resimYolu='';
+            if($request->file('resim'))
+            {
+                $resimYolu='storage/img/'.Helper::imageUpload($request->file('resim'), 'public/img');
+            }
+               
 
 
                 if(intval($language_id)!==0)
@@ -52,7 +49,7 @@ class DilController extends Controller
                         ->update([
                             'lang_name'=> $validatedData['lang_name'],
                             'lang_kod'=> $validatedData['lang_kod'],
-                            'resim'=>  $path
+                            'resim'=>  $resimYolu==''?$DilVerileri->resim:$resimYolu
 
                           
                         ]);
@@ -67,7 +64,7 @@ class DilController extends Controller
 
                  $Dil ->lang_name = $request->input('lang_name');
                  $Dil ->lang_kod = $request->input('lang_kod');
-                 $Dil ->resim = $path;
+                 $Dil ->resim = $resimYolu;
 
                  
                 
@@ -83,6 +80,12 @@ class DilController extends Controller
     {
         try {
             $sil_id = $request->input('sil_id');
+            $Translate = Translate::where('language_id', $sil_id)->get()->toArray();
+            if(!empty($Translate))
+            {
+                session()->flash('error', 'Bu dil ceviri sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
             $sil = DB::table('languages')->where('language_id', $sil_id)->delete();
     
             if ($sil) {

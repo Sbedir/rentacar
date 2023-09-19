@@ -14,8 +14,17 @@ class HaberController extends Controller
    
     public function index()
     {
-      
-        $haberVerileri = Haber::all(); // Tüm kullanıcıları çekmek için
+        $haberVerileri = DB::select(DB::raw("
+        SELECT h.*,
+        DATE_FORMAT(h.yayin_tarihi, '%Y-%m-%d') as yayin_tarihi
+        FROM `haber_duyuru` AS h
+       
+    
+       
+       
+       
+        "));
+      // Tüm kullanıcıları çekmek için
 
     return view('haberler', compact('haberVerileri'));
     }
@@ -26,16 +35,14 @@ class HaberController extends Controller
     {
         try {
                 $haber_id = $request->input('haber_id');
-                $image = $request->file('haber_resim');
 
-                // Resim dosyasının adını belirleyin ve depolamak için kullanın
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-            
-                // Resmi storage/app/public klasörüne kaydedin
-                Storage::disk('public')->put($imageName, file_get_contents($image));
-            
-                // Resmin yolunu veritabanına kaydedebilirsiniz
-                $path = 'storage/' . $imageName;
+                $resimYolu='';
+                if($request->file('resim'))
+                {
+                    $resimYolu='storage/img/'.Helper::imageUpload($request->file('haber_resim'), 'public/img');
+                              
+                }
+               
 
 
                 if(intval($haber_id)!==0)
@@ -50,8 +57,8 @@ class HaberController extends Controller
                         $validatedData = $request->validate([
                             'haber_adi' => 'required|string',
                             'haber_icerik' => 'required|string',
-                            'yayin_tarihi' => 'required|date',
-                            'begen' => 'required|integer'
+                            'yayin_tarihi' => 'required|date'
+                           
                        
                         ]);
                         $haber = Haber::where('haber_id', $haber_id)
@@ -59,8 +66,8 @@ class HaberController extends Controller
                             'haber_adi'=> $validatedData['haber_adi'],
                             'haber_icerik'=> $validatedData['haber_icerik'],
                             'yayin_tarihi'=> $validatedData['yayin_tarihi'],
-                            'haber_resim'=>  $path,
-                            'begen' => $validatedData['begen']
+                            'haber_resim'=>  $resimYolu==''?$haberVerileri->haber_resim:$resimYolu
+                           
                           
                         ]);
                         return redirect()->back()->with('success', 'işlem başarılı');
@@ -75,8 +82,8 @@ class HaberController extends Controller
                  $haber ->haber_adi = $request->input('haber_adi');
                  $haber ->haber_icerik = $request->input('haber_icerik');
                  $haber ->yayin_tarihi = $request->input('yayin_tarihi');
-                 $haber ->haber_resim = $path;
-                 $haber ->begen = $request->input('begen');;
+                 $haber ->haber_resim = $resimYolu;
+               
                  
                 
                  $haber->save();

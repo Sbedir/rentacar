@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Helper;
 use Illuminate\Http\Request;
 use App\Models\AracOfis;
+use App\Models\KiralananArac;
+use App\Models\Arac;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -93,6 +95,26 @@ class AracOfisController extends Controller
     {
         try {
             $sil_id = $request->input('sil_id');
+            $arac = Arac::where('ofis_id', $sil_id)->get()->toArray();
+            if(!empty($arac))
+            {
+                session()->flash('error', 'Bu ofis bilgisi daha önceden kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+
+            $karac = KiralananArac::where('alis_yeri_id', $sil_id)->get()->toArray();
+            if(!empty($karac))
+            {
+                session()->flash('error', 'Bu ofis bilgisi kiralanan araç sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+            $karac = KiralananArac::where('donus_yeri_id', $sil_id)->get()->toArray();
+            if(!empty($karac))
+            {
+                session()->flash('error', 'Bu ofis bilgisi kiralanan araç sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+
             $sil = DB::table('arac_ofis')->where('ofis_id', $sil_id)->delete();
     
             if ($sil) {

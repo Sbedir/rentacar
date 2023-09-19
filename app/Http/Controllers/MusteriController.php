@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Musteri;
+use App\Models\KiralananArac;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -86,6 +87,12 @@ class MusteriController extends Controller
     {
         try {
             $musterisil_id = $request->input('musterisil_id');
+            $KiralananArac = KiralananArac::where('musteri_id', $musterisil_id)->get()->toArray();
+            if(!empty($KiralananArac))
+            {
+                session()->flash('error', 'Bu müşteri daha önceden araç kiralamıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
             $musterisil = DB::table('musteri')->where('mus_id', $musterisil_id)->delete();
     
             if ($musterisil) {

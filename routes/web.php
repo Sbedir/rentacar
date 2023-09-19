@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/araclar', 'App\Http\Controllers\AracController@index');
+Route::get('/araclar', 'App\Http\Controllers\AracController@index')->name('araclar');
+
+Route::get('/user-update', 'App\Http\Controllers\UserController@index');
+
 Route::get('/haberler', 'App\Http\Controllers\HaberController@index');
 Route::get('/mesajlar', 'App\Http\Controllers\MesajController@index');
 Route::get('/kiralanan-araclar', 'App\Http\Controllers\KiralananAracController@index');
@@ -21,6 +25,10 @@ Route::get('/sayfalar', 'App\Http\Controllers\SayfaController@index');
 Route::get('/slider', 'App\Http\Controllers\SliderController@index');
 Route::get('/transferler', 'App\Http\Controllers\TransferHizmetController@index');
 Route::get('/transferler', 'App\Http\Controllers\TransferHizmetController@index');
+Route::get('/logout', 'App\Http\Controllers\GenelController@logout');
+Route::post('/login', 'App\Http\Controllers\GenelController@login')->name('genel.login');
+Route::get('/login', 'App\Http\Controllers\GenelController@logout')->name('login');
+
 
 
 
@@ -30,6 +38,7 @@ Route::get('/genel/ilce', 'App\Http\Controllers\GenelController@ilce');
 Route::get('/genel/ofis', 'App\Http\Controllers\GenelController@ofis');
 Route::get('/genel/kiralama-ucret-hesap', 'App\Http\Controllers\GenelController@kiralamaucrethesap');
 
+Route::post('/user/create-update', 'App\Http\Controllers\UserController@createUpdate')->name('user.create.update');
 
 Route::post('/arac/create-update', 'App\Http\Controllers\AracController@createUpdate')->name('arac.create.update');
 Route::post('/haber/create-update', 'App\Http\Controllers\HaberController@createUpdate')->name('haber.create.update');
@@ -74,6 +83,7 @@ Route::prefix('genel-ayarlar')->group(function () {
     Route::get('/arac-fiyatlari', 'App\Http\Controllers\AracFiyatController@index');
     Route::get('/arac-ofisleri', 'App\Http\Controllers\AracOfisController@index');
     Route::get('/il', 'App\Http\Controllers\ilController@index');
+    Route::get('/ilce', 'App\Http\Controllers\ilceController@index');
     Route::get('/diller', 'App\Http\Controllers\DilController@index');
     Route::get('/markalar', 'App\Http\Controllers\MarkaController@index');
     Route::get('/modeller', 'App\Http\Controllers\AracModelController@index');
@@ -87,6 +97,8 @@ Route::prefix('genel-ayarlar')->group(function () {
     Route::post('/aracofis/create-update', 'App\Http\Controllers\AracOfisController@createUpdate')->name('arac-ofis.create.update'); 
     Route::post('/ayarlar/create-update', 'App\Http\Controllers\AyarlarController@createUpdate')->name('ayarlar.create.update'); 
     Route::post('/il/create-update', 'App\Http\Controllers\IlController@createUpdate')->name('il.create.update'); 
+    Route::post('/ilce/create-update', 'App\Http\Controllers\IlceController@createUpdate')->name('ilce.create.update'); 
+
     Route::post('/dil/create-update', 'App\Http\Controllers\DilController@createUpdate')->name('dil.create.update'); 
     Route::post('/marka/create-update', 'App\Http\Controllers\MarkaController@createUpdate')->name('marka.create.update'); 
     Route::post('/model/create-update', 'App\Http\Controllers\AracModelController@createUpdate')->name('model.create.update');
@@ -99,6 +111,8 @@ Route::prefix('genel-ayarlar')->group(function () {
     Route::post('/fiyat/delete', 'App\Http\Controllers\AracFiyatController@deleteMe')->name('fiyat.delete');
     Route::post('/ofis/delete', 'App\Http\Controllers\AracOfisController@deleteMe')->name('ofis.delete');
     Route::post('/il/delete', 'App\Http\Controllers\ilController@deleteMe')->name('il.delete');
+    Route::post('/ilce/delete', 'App\Http\Controllers\ilceController@deleteMe')->name('ilce.delete');
+
     Route::post('/dil/delete', 'App\Http\Controllers\DilController@deleteMe')->name('dil.delete');
     Route::post('/marka/delete', 'App\Http\Controllers\MarkaController@deleteMe')->name('marka.delete');
     Route::post('/model/delete', 'App\Http\Controllers\AracModelController@deleteMe')->name('model.delete');

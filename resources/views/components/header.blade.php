@@ -1,4 +1,16 @@
 @inject('translateService', 'App\Services\TranslateService')
+<?php
+ if (Session::has('kullanici'))
+    {
+        $kullanici = json_decode(Session::get('kullanici'));
+     
+    }
+else
+   {
+    header('Location: http://127.0.0.1:8000/login');
+exit();
+   }
+?>
 <!DOCTYPE html>
 <!-- saved from url=(0068)https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html -->
 <html lang="en" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -20,7 +32,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
    
-    <link rel="icon" type="image/png" sizes="16x16" href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/img/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16"  href="{{ asset('form_files/favicon.png') }}">
 <style>.osSwitch{position:relative;display:inline-block;width:34px;height:15.3px}.osSwitch input{opacity:0;width:0;height:0}.osSlider{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:34px;background-color:#93a0b5;transition:0.4s}.osSlider:before{position:absolute;content:'';height:13px;width:13px;left:2px;bottom:1px;border-radius:50%;background-color:white;transition:0.4s}input:checked+.sliderGreen{background-color:#04d289}input:checked+.sliderRed{background-color:#ff3b30}input:not(:checked)+.defaultGreen{background-color:#04d289}input:checked+.osSlider:before{transform:translateX(17px)}
 </style><style>
     @font-face {
@@ -67,14 +79,14 @@
   </g>
 </svg></a>
                 <a class="navbar-brand" href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">
-                    <!-- <img class="dark" src="{{ asset('form_files/logo_dark.png') }}" alt="svg">
-                    <img class="light" src="./form_files/logo_white.png" alt="img"> -->
-                    <h3>RENT A CAR</h3>
+                     <img class="dark" src="{{ asset('form_files/logo.jpg') }}" alt="svg">
+                    <!-- <img class="light" src="./form_files/logo_white.png" alt="img">  -->
+                    <!-- <h3>RENT A CAR</h3> -->
                 </a>
-                <form action="https://demo.jsnorm.com/" class="search-form">
+                <!-- <form action="https://demo.jsnorm.com/" class="search-form">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <input class="form-control mr-sm-2 box-shadow-none" type="text" placeholder="Search...">
-                </form>
+                </form> -->
                 <!-- <div class="top-menu">
 
                     <div class="strikingDash-top-menu position-relative">
@@ -724,14 +736,33 @@
             <div class="navbar-right">
                 
                 <!-- <div class="navbar-right__mobileAction d-md-none">
-                    <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#" class="btn-search">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
-                    <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#" class="btn-author-action">
+                      <a href="#" class="btn-author-action">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
                 </div> -->
-            <ul class="navbar-right__menu">
-                    <!-- <li class="nav-search d-none">
+
+                <a href="/user-update" class="nav-item-toggle" style="
+                                padding: 7px;
+                                border-radius: 4px;
+                                color: #4d4d4d;
+                                font-size: 13px;
+                            "><i class="fa fa-user-circle" style='font-size: 18px;'></i>
+                    {{$kullanici->ad_soyad}}
+                    
+                                <!-- <img src="{{ asset('form_files/author-nav.jpg') }}" alt="" class="rounded-circle"> -->
+                            </a>
+                            <a href="/logout" style="
+                                border: 1px solid #c7c2c2;
+                                padding: 7px;
+                                border-radius: 4px;
+                                background: #f1eeee;
+                                color: #4d4d4d;
+                                font-size: 13px;
+                            " class="nav-author__signout">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>  {{$translateService->t("Çıkış")}}</a>
+                              
+            <!-- <ul class="navbar-right__menu">
+                
+                    <li class="nav-search d-none">
                         <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#" class="search-toggle">
                             <i class="la la-search"></i>
                             <i class="la la-times"></i>
@@ -1021,20 +1052,24 @@
                             </div>
                         </div>
                     </li> -->
-                    <li class="nav-flag-select">
+                    <!-- <li class="nav-flag-select">
                         <div class="dropdown-custom">
                             <a href="javascript:;" class="nav-item-toggle"><img src="{{ asset('form_files/flag.png') }}" alt="" class="rounded-circle"></a>
                             <div class="dropdown-wrapper dropdown-wrapper--small">
                                 <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/eng.png') }}" alt=""> English</a>
-                                <!-- <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/ger.png') }}" alt=""> German</a>
-                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/spa.png') }}" alt=""> Spanish</a> -->
+                                 <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/ger.png') }}" alt=""> German</a>
+                                <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/spa.png') }}" alt=""> Spanish</a> 
                                 <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html"><img src="{{ asset('form_files/tur.png') }}" alt=""> Turkish</a>
                             </div>
                         </div>
-                    </li>
+                    </li> 
                     <li class="nav-author">
                         <div class="dropdown-custom">
-                            <a href="javascript:;" class="nav-item-toggle"><img src="{{ asset('form_files/author-nav.jpg') }}" alt="" class="rounded-circle"></a>
+                            <a href="javascript:;" class="nav-item-toggle"><i class="fa fa-user-circle" style="
+                        font-size: 27px;
+                    "></i>
+                                <img src="{{ asset('form_files/author-nav.jpg') }}" alt="" class="rounded-circle">
+                            </a>
                             <div class="dropdown-wrapper">
                                 <div class="nav-author__info">
                                     <div class="author-img">
@@ -1051,7 +1086,7 @@
                                             <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> {{$translateService->t("Profil")}}</a>
                                         </li>
-                                        <!-- <li>
+                                         <li>
                                             <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</a>
                                         </li>
@@ -1066,7 +1101,7 @@
                                         <li>
                                             <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Help</a>
-                                        </li> -->
+                                        </li>
                                     </ul>
                                     <a href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html" class="nav-author__signout">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>  {{$translateService->t("Çıkış")}}</a>
@@ -1075,6 +1110,7 @@
                         </div>
                     </li>
                 </ul>
+                -->
             </div>
         </nav>
     </header>

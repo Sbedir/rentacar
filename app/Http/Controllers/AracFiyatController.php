@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Helper;
 use Illuminate\Http\Request;
 use App\Models\AracFiyat;
+use App\Models\KiralananArac;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -94,6 +95,14 @@ class AracFiyatController extends Controller
     {
         try {
             $sil_id = $request->input('sil_id');
+            $karac = KiralananArac::where('arac_id', $sil_id)->get()->toArray();
+            if(!empty($karac))
+            {
+                session()->flash('error', 'Bu fiyat bilgisi daha önceden kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+
+
             $sil = DB::table('arac_fiyati')->where('a_fiyat_id', $sil_id)->delete();
     
             if ($sil) {

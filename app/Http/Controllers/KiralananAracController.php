@@ -15,6 +15,8 @@ class KiralananAracController extends Controller
         $aracVerileri = DB::select(DB::raw("
         SELECT ka.*, a.a_resim AS resim,aao.ofis_name AS alis_yeri,ado.ofis_name
         AS donus_yeri,pb.para_name AS para_birim,
+         DATE_FORMAT(ka.alis_tarihi, '%Y-%m-%d') as alis_tarihi,
+        DATE_FORMAT(ka.donus_tarihi, '%Y-%m-%d') as donus_tarihi,
         CONCAT(mus.mus_adi,' ',mus.mus_soyadi)AS musteri_adi,
         CONCAT(m.mr_isim,' / ',mo.m_name,' / ',a.uretim_yili )AS arac_adi,
         il.il_id,ilce.ilce_id,d_ilce.ilce_id,d_il.il_id,

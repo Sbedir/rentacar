@@ -21,20 +21,19 @@ class AyarlarController extends Controller
     public function createUpdate(Request $request)
     {
         try {
-            $ayar_id = 1;
-            $image = $request->file('logo');
 
-            // Resim dosyasının adını belirleyin ve depolamak için kullanın
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-        
-            // Resmi storage/app/public klasörüne kaydedin
-            Storage::disk('public')->put($imageName, file_get_contents($image));
-        
-            // Resmin yolunu veritabanına kaydedebilirsiniz
-            $path = 'storage/' . $imageName;
-    
-            // "ayar_id" ile ilgili kaydı veritabanında ara
-            $ayarveri = Ayarlar::find($ayar_id);
+            $ayar_id = 1;
+              // "ayar_id" ile ilgili kaydı veritabanında ara
+              $ayarveri = Ayarlar::find($ayar_id);
+            if($request->file('logo'))
+            {
+                $resimYolu='storage/img/'.Helper::imageUpload($request->file('logo'), 'public/img');
+                $ayarveri->logo = $resimYolu;
+            }
+            else{
+                $ayarveri->logo = $ayarveri->logo;
+            }
+          
     
             if (!$ayarveri) {
                 // Eğer kayıt yoksa yeni bir Ayarlar örneği oluştur
@@ -56,7 +55,7 @@ class AyarlarController extends Controller
             // Verileri güncelle veya ekle
             $ayarveri->adres = $validatedData['adres'];
             $ayarveri->tel = $validatedData['tel'];
-            $ayarveri->logo = $path;
+            
             $ayarveri->e_posta = $validatedData['e_posta'];
             $ayarveri->maps = $validatedData['maps'];
             $ayarveri->face = $validatedData['face'];

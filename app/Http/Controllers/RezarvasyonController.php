@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Rezarvasyon;
 use Illuminate\Http\Request;
+use App\Models\KiralananArac;
 
 use Helper;
 use Illuminate\Support\Facades\DB;
@@ -88,6 +89,31 @@ class RezarvasyonController extends Controller
     {
         try {
             $sil_id = $request->input('sil_id');
+            $silinecekVeri = Rezarvasyon::where('rez_id', $sil_id)->first();
+            $navigasyon = KiralananArac::where('navigasyon', 1)->where('para_birim_id',$silinecekVeri->para_birim_id)->get()->toArray();
+            if(!empty($navigasyon))
+            {
+                session()->flash('error', 'Kiralanan araclar sayfasında navigasyon hizmeti kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+            $sofor_hizmeti = KiralananArac::where('sofor_hizmeti', 1)->where('para_birim_id',$silinecekVeri->para_birim_id)->get()->toArray();
+            if(!empty($sofor_hizmeti))
+            {
+                session()->flash('error', 'Kiralanan araclar sayfasında şoför hizmeti  kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+            $bebek_koltugu = KiralananArac::where('bebek_koltugu', 1)->where('para_birim_id',$silinecekVeri->para_birim_id)->get()->toArray();
+            if(!empty($bebek_koltugu))
+            {
+                session()->flash('error', 'Kiralanan araclar sayfasında bebek koltuğu hizmeti  kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+            $yol_haritasi = KiralananArac::where('yol_haritasi', 1)->where('para_birim_id',$silinecekVeri->para_birim_id)->get()->toArray();
+            if(!empty($yol_haritasi))
+            {
+                session()->flash('error', 'Kiralanan araclar sayfasında yol haritası hizmeti  kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
             $sil = DB::table('rezervasyon_extralari')->where('rez_id', $sil_id)->delete();
     
             if ($sil) {

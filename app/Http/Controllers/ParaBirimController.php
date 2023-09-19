@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Models\ParaBirim;
+use App\Models\AracFiyat;
+use App\Models\KiralananArac;
+use App\Models\Rezarvasyon;
+use App\Models\TransferHizmet;
 use Illuminate\Http\Request;
 
 use Helper;
@@ -70,8 +74,37 @@ class ParaBirimController extends Controller
 
     public function deleteMe(Request $request)
     {
+      
         try {
             $sil_id = $request->input('sil_id');
+
+            $AracFiyat = AracFiyat::where('para_birim_id', $sil_id)->get()->toArray();
+            if(!empty($AracFiyat))
+            {
+                session()->flash('error', 'Bu araç fiyatları sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+
+            $KiralananArac = KiralananArac::where('para_birim_id', $sil_id)->get()->toArray();
+            if(!empty($KiralananArac))
+            {
+                session()->flash('error', 'Bu kiralanan araç sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+
+            $Rezarvasyon = Rezarvasyon::where('para_birim_id', $sil_id)->get()->toArray();
+            if(!empty($Rezarvasyon))
+            {
+                session()->flash('error', 'Bu rezarvasyon extraları sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+
+            $Translate = TransferHizmet::where('para_birim_id', $sil_id)->get()->toArray();
+            if(!empty($Translate))
+            {
+                session()->flash('error', 'Bu transferler sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
             $sil = DB::table('para_birimi')->where('para_birim_id', $sil_id)->delete();
     
             if ($sil) {

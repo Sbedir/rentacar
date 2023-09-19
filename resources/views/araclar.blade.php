@@ -89,7 +89,13 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <img style='max-width: 100px;' src="{{ asset($arac->a_resim) }}" alt="svg">     
+                                                @if ($arac->a_resim == "")
+                                                    <img style='max-width: 100px;' src='/storage/img/resim-yok.png'>
+                                                    @else
+                                                    <img style='max-width: 100px;'
+                                                        src="{{ asset($arac->a_resim) }}" alt="svg">
+                                                    @endif
+                                                         
                                                 </td>
                                                 <td>{{ $arac->marka_name }}</td>
                                                 <td>{{ $arac->model_name }}</td>
@@ -144,15 +150,31 @@
                             
                             
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4 mt-2">
-                            <div class="form-group mb-0">
-                                <div class="input-container icon-left position-relative">
-                                    <label for="" class="form-group mb-0"><b>Resim Ekle</b></label>
-                                    <input name="a_resim" id='a_resim' type="file" class="form-control form-control-default" placeholder="Resim Ekle">
+                <div class="row">
+                        <div class="col-md-3 mt-2">
+                            <div class="row">
+                                <div class="col-md-12 mt-2">
+                                    <div class="form-group mb-0" id="logom" style='text-align: center;'>
+
+                                       
+
+                                    </div>
                                 </div>
+                                 <div class="col-md-12 mt-2">
+                                    <div class="form-group mb-0">
+                                        <div class="input-container icon-left position-relative">
+                                            <label for="" class="form-group mb-0"><b>Resim Ekle</b></label>
+                                            <input name="a_resim" type="file" class="form-control form-control-default"
+                                                placeholder="Resim Ekle">
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
+                        <div class="col-md-9 mt-2">
+                    <div class="row">
+                       
 
                         <div class="col-md-4 mt-2">
                             <div class="form-group mb-0">
@@ -387,12 +409,16 @@
 
                     </div>
                 </div>
+                </div>
+                </div>
                 <div class="modal-footer">
                     <button  type="submit" class="btn btn-primary btn-sm">Kaydet</button>
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
                 </div>
             </form>
 
+            </div>
+    </div>
         </div>
     </div>
 
@@ -448,7 +474,7 @@
         $( "#modal-header-back" ).removeClass( "bg-warning" ).addClass("bg-success");
         $('#modalTitle').html('Araç Ekleme');
         $('#mr_id').val("");
-        
+        $('#logom').html("<img style='max-width: 178px;' src='/storage/img/resim-yok.png' >");
         $('#model-select').val("");
         // $('#model-select').val(arac.m_id);
         $('#uretim_yili').val("");
@@ -470,7 +496,8 @@
         $( "#modal-header-back" ).removeClass( "bg-success" ).addClass( "bg-warning" );
         console.log(arac)
         $('#modalTitle').html('Araç Güncelleme');
-        
+        $('#logom').html("<img style='max-width: 178px;' src='/" + (arac.a_resim==""?"storage/img/resim-yok.png":arac.a_resim) + "' >");
+
         $('#mr_id').val(arac.mr_id);
         markaSec(arac.mr_id,arac.m_id);
         // $('#model-select').val(arac.m_id);

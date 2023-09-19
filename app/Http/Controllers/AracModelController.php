@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\AracModel;
 use Illuminate\Http\Request;
-
+use App\Models\Arac;
 use Helper;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -79,6 +79,13 @@ public function deleteMe(Request $request)
 {
     try {
         $sil_id = $request->input('sil_id');
+
+        $arac = Arac::where('m_id', $sil_id)->get()->toArray();
+        if(!empty($arac))
+        {
+            session()->flash('error', 'Bu model arac sayfasında kullanılmıştır.Bu nedenle silemessiniz.');
+            return redirect()->back();
+        }
         $sil = DB::table('model')->where('m_id', $sil_id)->delete();
 
         if ($sil) {

@@ -91,6 +91,9 @@
                                     <a class=""  href="{{url('/genel-ayarlar/il')}}">{{$translateService->t("İl")}}</a>
                                 </li>
                                 <li>
+                                    <a class=""  href="{{url('/genel-ayarlar/ilce')}}">{{$translateService->t("İlce")}}</a>
+                                </li>
+                                <li>
                                     <a class="" href="{{url('/genel-ayarlar/diller')}}">
                                     {{$translateService->t("Diller")}}  </a>
                                 </li>

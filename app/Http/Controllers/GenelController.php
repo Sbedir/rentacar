@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Arac;
+use App\Models\User;
 use App\Models\AracFiyat;
 use App\Models\Rezarvasyon;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Services\GenelService;
+// use Illuminate\Support\Facades\Session;
 class GenelController extends Controller
 {
     protected $genelService;
@@ -49,7 +51,7 @@ class GenelController extends Controller
 
       // İki tarih arasındaki gün farkını hesaplayın
       $fark = $ilkTarih->diffInDays($ikinciTarih);
-      $gun=$fark==0?1:$fark;
+      $gun=$fark+1;
 
 
       $aracfiyatverileri = AracFiyat::where('arac_id', $request['arac_id'])
@@ -57,7 +59,10 @@ class GenelController extends Controller
       ->where('gun_baslangic', '<=', $gun)
       ->where('gun_bitis', '>=', $gun)
       ->first();
-
+      if($aracfiyatverileri==null)
+      {
+            return response()->json(['hata'=>'*** '.$gun.' gün için bu araca ait fiyat bilgisi bulunamadı.Lütfen araca gün fiyat bilgisi ekleyiniz!']);
+      }
       $rezervasyonfiyatverileri = Rezarvasyon::where('para_birim_id',$request['para_birim'])
       ->first();
       $kiralananFiyat=$aracfiyatverileri->fiyat;
@@ -84,6 +89,44 @@ class GenelController extends Controller
       //     $ofisler = $this->genelService->ofis($ilceId);
       //     return response()->json($ofisler);
     }
+
+    public function logout()
+    {
+
+      // session_destroy();
+      session()->forget('kullanici');
+      return view('login');
+    }
+
+    public function login(Request $request)
+    {
+        $username = $request->input('username');
+        $password = $request->input('password');
+    
+        // Kullanıcı adına göre kullanıcıyı buluyoruz
+        $user = User::where('kullanici_adi', $username)->first();
+   
+        if ($user) {
+          
+            // Eğer kullanıcı varsa, şifre kontrolü yapabiliriz
+            if (md5($password)==$user->sifre) {
+                  session()->put('kullanici', json_encode($user));
+                // Şifre doğruysa, kullanıcı giriş yapmıştır
+                // İstediğiniz işlemi burada gerçekleştirebilirsiniz
+                return redirect()->route('araclar'); // Örnek olarak anasayfaya yönlendiriyoruz
+            }
+        }
+    
+        // Eğer kullanıcı adı veya şifre yanlışsa, giriş sayfasına geri dönebiliriz
+        return redirect()->route('login')->with('error', 'Kullanıcı adı veya şifre hatalı.');
+    }
+
+    
+    
+    
+    
+    
+ 
 
     
 }

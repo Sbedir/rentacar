@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use Helper;
 use Illuminate\Http\Request;
 use App\Models\Arac;
+use App\Models\KiralananArac;
+use App\Models\AracFiyat;
+
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -34,20 +37,14 @@ class AracController extends Controller
     {
         try {
                 $a_id = $request->input('a_id');
+                $resimYolu='';
+            if($request->file('a_resim'))
+            {
+                $resimYolu='storage/img/'.Helper::imageUpload($request->file('a_resim'), 'public/img');
+            }
               
 
-                $image = $request->file('a_resim');
 
-                // Resim dosyasının adını belirleyin ve depolamak için kullanın
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-            
-                // Resmi storage/app/public klasörüne kaydedin
-                Storage::disk('public')->put($imageName, file_get_contents($image));
-            
-                // Resmin yolunu veritabanına kaydedebilirsiniz
-                $path = 'storage/' . $imageName;
-
-                
                 if(intval($a_id)!==0)
                 {
                     $aracVerileri = DB::select(DB::raw("
@@ -79,7 +76,7 @@ class AracController extends Controller
                             'mr_id'=> $validatedData['mr_id'],
                             'm_id'=> $validatedData['m_id'],
                             'uretim_yili'=> $validatedData['uretim_yili'],
-                            'a_resim'=> $path,
+                            'a_resim'=>  $resimYolu==''? $aracVerileri[0]->a_resim:$resimYolu,
                             'a_musait' => $validatedData['a_musait'],
                             'yolcu_kapasite'=>$validatedData['yolcu_kapasite'],
                             'bagaj_kapasitesi'=> $validatedData['bagaj_kapasitesi'],
@@ -101,7 +98,7 @@ class AracController extends Controller
                  $arac ->mr_id = $request->input('mr_id');
                  $arac ->m_id = $request->input('m_id');
                  $arac ->uretim_yili = $request->input('uretim_yili');
-                 $arac ->a_resim =  $path;
+                 $arac ->a_resim = $resimYolu;
                  $arac ->a_musait = $request->input('a_musait');
                  $arac ->yolcu_kapasite = $request->input('yolcu_kapasite');
                  $arac ->bagaj_kapasitesi = $request->input('bagaj_kapasitesi');
@@ -122,6 +119,20 @@ class AracController extends Controller
     {
         try {
             $a_id = $request->input('a_id');
+            $afiyat = AracFiyat::where('arac_id', $a_id)->get()->toArray();
+
+            $karac = KiralananArac::where('arac_id', $a_id)->get()->toArray();
+            $afiyat = AracFiyat::where('arac_id', $a_id)->get()->toArray();
+            if(!empty($karac))
+            {
+                session()->flash('error', 'Bu arac daha önceden kiralanmıştır.Bu nedenle silemessiniz.');
+                return redirect()->back();
+            }
+            if(!empty($afiyat))
+            {
+                session()->flash('error', 'Bu araca ait eklemiş olduğunuz fiyat bilgisi bulunmaktadır. Eğer bu aracı silmek istiyorsanız arac fiyatları sayfasından bu araca ait fiyat bilgilerini silmelisiniz.');
+                return redirect()->back();
+            }
             $aracsil = DB::table('arac')->where('a_id', $a_id)->delete();
     
             if ($aracsil) {
