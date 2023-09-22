@@ -71,7 +71,7 @@ class SayfaController extends Controller
                  }
 
                  $sayfa ->sayfa_baslik = $request->input('sayfa_baslik');
-                 $sayfa ->icerik = $request->input('icerik');
+                 $sayfa ->icerik = htmlspecialchars($request->input('icerik'));
                  $sayfa ->description = $request->input('description');
                  $sayfa ->keywords = $request->input('keywords');
                  $sayfa ->title = $request->input('title');

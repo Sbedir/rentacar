@@ -229,6 +229,13 @@
     
     function ekleModal()
     {
+        tinymce.init({
+        selector: 'textarea', // Bu tüm textarea elementlerine TinyMCE uygular
+        plugins: 'autolink lists link image',
+        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        menubar: false
+    });
+
         $( "#modal-header-back" ).removeClass( "bg-warning" ).addClass("bg-success");
         $('#modalTitle').html('Sayfa Ekleme');
         $('#sayfa_baslik').val("");
@@ -241,6 +248,12 @@
     }
     function guncelleModal(sayfa)
     {
+        tinymce.init({
+        selector: 'textarea', // Bu tüm textarea elementlerine TinyMCE uygular
+        plugins: 'autolink lists link image',
+        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        menubar: false
+    });
         console.log(sayfa)
         $( "#modal-header-back" ).removeClass( "bg-success" ).addClass( "bg-warning" );
         $('#modalTitle').html('Sayfa Güncelleme');

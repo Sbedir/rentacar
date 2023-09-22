@@ -42,6 +42,8 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
   
 
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+<link rel="stylesheet" href="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/skins/ui/oxide/skin.min.css">
 
 
 
@@ -58,6 +60,7 @@
     // {
     //     $('#ekleGüncelleModal').modal();
     // }
+    
     </script>
 
 </body></html>
