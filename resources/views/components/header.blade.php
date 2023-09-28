@@ -78,7 +78,7 @@ exit();
     </g>
   </g>
 </svg></a>
-                <a class="navbar-brand" href="https://demo.jsnorm.com/html/strikingdash/strikingdash/ltr/form.html#">
+                <a class="navbar-brand" href="{{url('/araclar')}}">
                      <img class="dark" src="{{ asset('form_files/logo.jpg') }}" alt="svg">
                     <!-- <img class="light" src="./form_files/logo_white.png" alt="img">  -->
                     <!-- <h3>RENT A CAR</h3> -->

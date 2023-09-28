@@ -7,10 +7,16 @@ use Illuminate\Http\Request;
 use Helper;
 use Illuminate\Support\Facades\DB;
 use Exception;
-
+use App\Services\GenelService;
 
 class HaberController extends Controller
 {
+    protected $genelService;
+    
+    public function __construct(GenelService $genelService)
+    {
+        $this->genelService = $genelService;
+    }
    
     public function index()
     {
@@ -37,9 +43,10 @@ class HaberController extends Controller
                 $haber_id = $request->input('haber_id');
 
                 $resimYolu='';
-                if($request->file('resim'))
+                if($request->file('haber_resim'))
                 {
                     $resimYolu='storage/img/'.Helper::imageUpload($request->file('haber_resim'), 'public/img');
+                   
                               
                 }
                
@@ -66,9 +73,8 @@ class HaberController extends Controller
                             'haber_adi'=> $validatedData['haber_adi'],
                             'haber_icerik'=> $validatedData['haber_icerik'],
                             'yayin_tarihi'=> $validatedData['yayin_tarihi'],
-                            'haber_resim'=>  $resimYolu==''?$haberVerileri->haber_resim:$resimYolu
-                           
-                          
+                            'haber_resim'=>  $resimYolu==''?$haberVerileri->haber_resim:$resimYolu,
+                            'unique_name'=>$haberVerileri->unique_name==''?$this->genelService->uniqueName('haber_duyuru',$request->input('haber_adi')):$haberVerileri->unique_name
                         ]);
                         return redirect()->back()->with('success', 'işlem başarılı');
                     }
@@ -83,7 +89,7 @@ class HaberController extends Controller
                  $haber ->haber_icerik = $request->input('haber_icerik');
                  $haber ->yayin_tarihi = $request->input('yayin_tarihi');
                  $haber ->haber_resim = $resimYolu;
-               
+                 $haber->unique_name=$this->genelService->uniqueName('haber_duyuru',$request->input('haber_adi'));
                  
                 
                  $haber->save();

@@ -101,7 +101,7 @@
                                                 <td>{{ $arac->model_name }}</td>
                                                 <td>{{ $arac->uretim_yili }}</td>
                                                 <td>{{ $arac->arac_musait }}</td>
-                                                <td>Bu veri sonra eklenecek</td>
+                                                <td><?= $arac->kiralik==1?"<p style='color:red'>Bugün kiralanmış.</p>":"<p style='color:green'>Kiralanabilir.</p>"; ?></td>
                                                 <td>{{ $arac->yolcu_kapasite }}</td>
                                                 <td>{{ $arac->bagaj_kapasitesi }} kg</td>
                                                 <td>{{ $arac->yakit_tur_adi }}</td>

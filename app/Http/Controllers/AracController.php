@@ -16,6 +16,7 @@ class AracController extends Controller
     {
         $aracVerileri = DB::select(DB::raw("
         SELECT a.*, m.mr_isim AS marka_name, mo.m_name AS model_name,
+        IF(ka.arac_id is not null,1,0) as kiralik,
         IF(a.a_musait = 1, 'Müsait', 'Müsait Değil') AS arac_musait,
         IF(a.yakit_tur = 1, 'Benzin', IF(a.yakit_tur = 2, 'LPG', IF(a.yakit_tur = 3, 'Benzin/LPG', IF(a.yakit_tur = 4, 'Dizel', IF(a.yakit_tur = 5, 'Elektrik', 'Hybrid'))))) AS yakit_tur_adi,
         IF(a.vites_tur = 1, 'Manuel', IF(a.vites_tur = 2, 'Yarı Otomatik', IF(a.vites_tur = 3, 'Otomatik', 'Triptonik'))) AS vites_tur_name,
@@ -29,6 +30,7 @@ class AracController extends Controller
         LEFT JOIN arac_ofis ao on ao.ofis_id=a.ofis_id
         LEFT JOIN ilce on ilce.ilce_id=ao.ilce_id
         LEFT JOIN il on il.il_id=ilce.il_id
+        LEFT JOIN kiralanan_arac ka on ka.arac_id=a.a_id and ka.alis_tarihi<='".date("Y-m-d H:i:s")."' and ka.donus_tarihi>='".date("Y-m-d H:i:s")."'
         "));
         return view('araclar', compact('aracVerileri'));
     }

@@ -58,7 +58,8 @@
                                         <thead>
                                             <tr>
                                                 
-                                                <th>İşlem</th> 
+                                                <th>İşlem</th>
+                                                <th>Onay Durumu</th> 
                                                 <th>Resim</th>
                                                 <th>Arac</th>
                                                 <th>Alış Yeri</th>
@@ -87,6 +88,34 @@
                                                         <a href="#" onClick='silModal({{ json_encode($arac) }})'>
                                                             <span data-feather="trash-2"></span>
                                                         </a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                <div class="table-actions">
+                                                    <?php if($arac->onay==null){?>
+                                                        <a href="{{url('/kiralanan-araclar/onay/'.$arac->id)}}" class='btn btn-success btn-xs' onClick='onaylaButton({{ json_encode($arac) }})'>
+                                                            Onayla
+                                                        </a>
+                                                        <a href="#" class='btn btn-danger btn-xs'  onClick='reddetModal({{ json_encode($arac) }})'>
+                                                            Reddet
+                                                        </a>
+                                                        <?php } else{
+                                                            if($arac->onay==1)
+                                                            {
+                                                                echo '<p style="color:green">Onaylandı</p>';
+                                                            }
+                                                            else
+                                                            {
+                                                              echo'    <p style="color:red" data-toggle="tooltip" data-placement="top" title="'.$arac->red_nedeni.'">
+                                                              Reddedildi
+                                                           
+                                                            </p>';
+                                                               
+                                                            }
+                                                          
+
+                                                        }?>
+                                                        
                                                     </div>
                                                 </td>
                                                 <td>
@@ -266,7 +295,7 @@
                     </div>
 
                 
-                <div class="col-md-12 mt-2">
+                     <div class="col-md-12 mt-2">
                         <div class="form-group mb-0">
                             
                             <label for="" class="form-group mb-0"><b>Alış Yeri</b></label>
@@ -552,7 +581,89 @@
 
 
 </div>
+<div class="modal-basic modal fade show" id="silModall" tabindex="-1" role="dialog" aria-hidden="true">
 
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-bg-white ">
+            <div class="modal-header  bg-danger">
+
+
+
+                <h6 class="modal-title">Kiralık Araç Silme</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span data-feather="x"></span></button>
+            </div>
+            <form method="POST" action="{{ route('kiralananarac.delete') }}" enctype="multipart/form-data">
+                @csrf <!-- Cross-Site Request Forgery (CSRF) koruması -->
+              
+                <input name="arackira_id" id='arackira_id'  type="hidden" class="form-control form-control-default">
+            <div class="modal-body">
+                <div class="row">
+                   Silmek istediğinize emin misiniz?
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm">Sil</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
+            </div>
+             </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="modal-basic modal fade show" id="redModall" tabindex="-1" role="dialog" aria-hidden="true">
+
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-bg-white ">
+            <div class="modal-header  bg-danger">
+
+
+
+                <h6 class="modal-title">Kiralık Araç Red İşlemi</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span data-feather="x"></span></button>
+            </div>
+            <form method="POST" action="{{ route('kiralananarac.redislemi') }}" enctype="multipart/form-data">
+                @csrf
+                <!-- Cross-Site Request Forgery (CSRF) koruması -->
+
+                <input name="aracred_id" id='aracred_id' type="hidden" class="form-control form-control-default">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mt-4">
+                            <div class="form-group mb-0">
+                                <label for="" class="form-group mb-0"> Red Nedeni Açıklama</label>
+
+                                <div class="form-check form-switch">
+
+                                     <textarea class="form-group col-md-12" name="red_aciklama" id="red_aciklama">
+
+                                     </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Kapat</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+</div>
 
 <style>
     .alisDonus{
@@ -627,6 +738,15 @@
         console.log(arac);
         $('#silModall').modal();
     }
+
+    function reddetModal(arac) {
+    $('#aracred_id').val(arac.id);
+    console.log(arac);
+    $('#redModall').modal();
+}
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
 
     function hesap()
     {

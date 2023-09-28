@@ -46,6 +46,7 @@ re.bebek_koltugu as bebek_koltugu_fiyat,
 
         
         "));
+      
         return view('kiralanan-araclar', compact('aracVerileri'));
     }
 
@@ -147,6 +148,36 @@ re.bebek_koltugu as bebek_koltugu_fiyat,
             // Hata yakalandığında yapılacak işlemler burada yer alır
             dd($e->getMessage()); // Hata mesajını bastırma
         }
+    }
+
+    public function kiralananAracOnayla($id)
+    {
+        try {
+        $kirArac = KiralananArac::where('id', $id)
+        ->update([
+            'onay'=>1,
+        ]);
+        return redirect()->back()->with('success', 'işlem başarılı');
+    } catch (Exception $e) {
+        // Hata yakalandığında yapılacak işlemler burada yer alır
+        dd($e->getMessage()); // Hata mesajını bastırma
+    }
+    }
+
+    public function redislem(Request $request)
+    {
+        try {
+            $aracred_id = $request->input('aracred_id');
+        $redArac = KiralananArac::where('id', $aracred_id)
+        ->update([
+            'onay'=>2,
+            'red_nedeni'=>$request->input('red_aciklama')
+        ]);
+        return redirect()->back()->with('success', 'işlem başarılı');
+    } catch (Exception $e) {
+        // Hata yakalandığında yapılacak işlemler burada yer alır
+        dd($e->getMessage()); // Hata mesajını bastırma
+    }
     }
     
 }

@@ -26,8 +26,11 @@ Route::get('/slider', 'App\Http\Controllers\SliderController@index');
 Route::get('/transferler', 'App\Http\Controllers\TransferHizmetController@index');
 Route::get('/transferler', 'App\Http\Controllers\TransferHizmetController@index');
 Route::get('/logout', 'App\Http\Controllers\GenelController@logout');
+
+Route::get('/login', 'App\Http\Controllers\GenelController@login');
+
+Route::get('/login', 'App\Http\Controllers\GenelController@login')->name('login');
 Route::post('/login', 'App\Http\Controllers\GenelController@login')->name('genel.login');
-Route::get('/login', 'App\Http\Controllers\GenelController@logout')->name('login');
 
 
 
@@ -43,6 +46,9 @@ Route::post('/user/create-update', 'App\Http\Controllers\UserController@createUp
 Route::post('/arac/create-update', 'App\Http\Controllers\AracController@createUpdate')->name('arac.create.update');
 Route::post('/haber/create-update', 'App\Http\Controllers\HaberController@createUpdate')->name('haber.create.update');
 Route::post('/kiralananarac/create-update', 'App\Http\Controllers\KiralananAracController@createUpdate')->name('kiralananarac.create.update');
+Route::post('/kiralananarac/redislemi', 'App\Http\Controllers\KiralananAracController@redislem')->name('kiralananarac.redislemi');
+
+Route::get('/kiralanan-araclar/onay/{id}', 'App\Http\Controllers\KiralananAracController@kiralananAracOnayla');
 Route::post('/musteri/create-update', 'App\Http\Controllers\MusteriController@createUpdate')->name('musteri.create.update');
 Route::post('/sayfa/create-update', 'App\Http\Controllers\SayfaController@createUpdate')->name('sayfa.create.update');
 Route::post('/slider/create-update', 'App\Http\Controllers\SliderController@createUpdate')->name('slider.create.update');

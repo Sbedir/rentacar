@@ -95,30 +95,34 @@ class GenelController extends Controller
 
       // session_destroy();
       session()->forget('kullanici');
-      return view('login');
+      return redirect('login');
     }
 
     public function login(Request $request)
     {
-        $username = $request->input('username');
+       $username = $request->input('username');
         $password = $request->input('password');
-    
-        // Kullanıcı adına göre kullanıcıyı buluyoruz
-        $user = User::where('kullanici_adi', $username)->first();
-   
-        if ($user) {
-          
-            // Eğer kullanıcı varsa, şifre kontrolü yapabiliriz
-            if (md5($password)==$user->sifre) {
-                  session()->put('kullanici', json_encode($user));
-                // Şifre doğruysa, kullanıcı giriş yapmıştır
-                // İstediğiniz işlemi burada gerçekleştirebilirsiniz
-                return redirect()->route('araclar'); // Örnek olarak anasayfaya yönlendiriyoruz
+      if( $username!==null && $password !==null)
+      {
+            // Kullanıcı adına göre kullanıcıyı buluyoruz
+            $user = User::where('kullanici_adi', $username)->first();
+            
+            if ($user) {
+            
+                  // Eğer kullanıcı varsa, şifre kontrolü yapabiliriz
+                  if (md5($password)==$user->sifre) {
+                        session()->put('kullanici', json_encode($user));
+                  // Şifre doğruysa, kullanıcı giriş yapmıştır
+                  // İstediğiniz işlemi burada gerçekleştirebilirsiniz
+                  return redirect('araclar'); // Örnek olarak anasayfaya yönlendiriyoruz
+                  }
             }
-        }
-    
-        // Eğer kullanıcı adı veya şifre yanlışsa, giriş sayfasına geri dönebiliriz
-        return redirect()->route('login')->with('error', 'Kullanıcı adı veya şifre hatalı.');
+
+            // Eğer kullanıcı adı veya şifre yanlışsa, giriş sayfasına geri dönebiliriz
+            return redirect()->route('login')->with('error', 'Kullanıcı adı veya şifre hatalı.');
+      }
+      return view('login');
+      
     }
 
     

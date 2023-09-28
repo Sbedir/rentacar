@@ -185,4 +185,28 @@ class GenelService
         return  $data;
     }
 
+    public function uniqueName($table,$name,$say=0)
+    {
+        $kucult=strtolower($name);
+        $unique_name=$this->replace_tr($kucult.($say==0?"":"-".$say));
+        $data = DB::select(DB::raw("
+            SELECT * FROM ".$table." where unique_name='".$unique_name."'
+        "));
+        if(!empty($data))
+        {
+            $say++;
+            $this->uniqueName($table,$name,$say);
+        }
+
+        return  $unique_name;
+    }
+
+    public function replace_tr($text) {
+        $text = trim($text);
+        $search = array('Ç','ç','Ğ','ğ','ı','İ','Ö','ö','Ş','ş','Ü','ü',' ');
+        $replace = array('c','c','g','g','i','i','o','o','s','s','u','u','-');
+        $new_text = str_replace($search,$replace,$text);
+        return $new_text;
+    } 
+
 }
