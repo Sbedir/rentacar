@@ -26,7 +26,13 @@ class SliderController extends Controller
                 $resimYolu='';
                 if($request->file('resim'))
                 {
-                    $resimYolu='storage/img/'.Helper::imageUpload($request->file('resim'), 'public/img');
+                    //$resimYolu='storage/img/'.Helper::imageUpload($request->file('resim'), 'public/img');
+                    $filename=$request->file('a_resim');
+                    $extension = $filename->extension();
+                    $originalImageName = $filename->getClientOriginalName();
+                      $resimAdi=$originalImageName.'_'.time().'.'.$extension;
+                    $request->file('a_resim')->move(public_path('images'),$resimAdi);
+                    $resimYolu= 'images/'.$resimAdi;
                 }
 
                 if(intval($sli_id)!==0)

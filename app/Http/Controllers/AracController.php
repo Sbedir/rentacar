@@ -42,7 +42,13 @@ class AracController extends Controller
                 $resimYolu='';
             if($request->file('a_resim'))
             {
-                $resimYolu='storage/img/'.Helper::imageUpload($request->file('a_resim'), 'public/img');
+               // $resimYolu='storage/img/'.Helper::imageUpload($request->file('a_resim'), 'public/img');
+               $filename=$request->file('a_resim');
+               $extension = $filename->extension();
+               $originalImageName = $filename->getClientOriginalName();
+                 $resimAdi=$originalImageName.'_'.time().'.'.$extension;
+               $request->file('a_resim')->move(public_path('images'),$resimAdi);
+               $resimYolu= 'images/'.$resimAdi;
             }
               
 
